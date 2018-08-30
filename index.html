@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hent JSON</title>
+    <style>
+        img{
+
+        }
+        article{
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+
+   <section class="data-container"></section>
+
+   <template class="data-template">
+      <article>
+          <h2></h2>
+          <img src="" alt=""><br>
+          mail: <a class="data-mail" href=""></a><br>
+          github: <span class="data-github"></span><br>
+          tlf: <span class="data-tlf"></span><br>
+
+      </article>
+   </template>
+
+   <script>
+    document.addEventListener("DOMContentLoaded", hentJson);
+
+       let personer;
+
+    async function hentJson(){
+
+        let myJson = await fetch("personliste.json");
+        personer = await myJson.json();
+
+        console.log(personer[0].navn);
+
+        visPersoner();
+    }
+
+
+       function visPersoner(){
+
+           let modtager = document.querySelector(".data-container");
+           let temp = document.querySelector(".data-template");
+
+           //løb personlisten igennem og lav en klon
+
+           personer.forEach( person => {
+            //lav en klon af template
+           let klon = temp.cloneNode(true).content;
+               //indsæt data i html
+           klon.querySelector("h2").textContent = person.navn;
+           klon.querySelector("img").src = person.billede;
+           klon.querySelector(".data-github").textContent = person.github;
+           klon.querySelector(".data-tlf").textContent = person.tlf;
+           klon.querySelector(".data-mail").textContent = person.mail;
+           klon.querySelector(".data-mail").href = "mailto:"+person.mail;
+
+               //placer klon i html
+
+              modtager.appendChild(klon);
+
+
+           } )
+       }
+
+    </script>
+
+
+</body>
+</html>
